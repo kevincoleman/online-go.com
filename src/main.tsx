@@ -45,6 +45,7 @@ import {_} from "translate";
 import {init_tabcomplete} from "tabcomplete";
 import * as player_cache from "player_cache";
 import {toast} from 'toast';
+import registerServiceWorker from './registerServiceWorker';
 
 import "debug";
 
@@ -185,3 +186,5 @@ init_tabcomplete();
 
 /* Initialization done, render!! */
 ReactDOM.render(routes, document.getElementById("main-content"));
+
+registerServiceWorker();

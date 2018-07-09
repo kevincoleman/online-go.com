@@ -6,6 +6,8 @@ var path = require('path');
 let fs = require('fs');
 var webpack = require('webpack');
 const pkg = require('./package.json');
+const ManifestPlugin = require('webpack-manifest-plugin');
+const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
 
 const production = process.env.PRODUCTION ? true : false;
 
@@ -52,6 +54,24 @@ if (production) {
 
 plugins.push(new webpack.DefinePlugin(defines));
 
+plugins.push(new ManifestPlugin({
+    fileName: 'asset-manifest.json',
+}));
+
+plugins.push(new SWPrecacheWebpackPlugin({
+    dontCacheBustUrlsMatching: /\.\w{8}\./,
+    filename: 'service-worker.js',
+    logger(message) {
+        if (message.indexOf('Total precache size is') === 0) {
+            // shhhh...
+            return;
+        }
+        console.log(message);
+    },
+    minify: true,
+    navigateFallback: '/index.html',
+    staticFileGlobsIgnorePatterns: [/\.map$/, /asset-manifest\.json$/],
+}));
 
 module.exports = {
     entry: {
