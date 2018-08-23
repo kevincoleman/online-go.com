@@ -8,6 +8,7 @@ var webpack = require('webpack');
 const pkg = require('./package.json');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const production = process.env.PRODUCTION ? true : false;
 
@@ -72,6 +73,10 @@ plugins.push(new SWPrecacheWebpackPlugin({
     navigateFallback: '/index.html',
     staticFileGlobsIgnorePatterns: [/\.map$/, /asset-manifest\.json$/],
 }));
+
+plugins.push(new CopyWebpackPlugin([
+    { from: 'src/pwa' },
+]));
 
 module.exports = {
     entry: {
